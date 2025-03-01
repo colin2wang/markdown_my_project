@@ -1,0 +1,19 @@
+# Project Configuration for My Project
+
+# Name of the project
+project_name: "My Project"
+
+# Path to the project root directory
+project_path: "path/to/project"
+
+# Output file path for the generated documentation
+output_file: "project.md"
+
+# List of specific files to include in the documentation
+files:
+  - "file1.txt"
+  - "file2.txt"
+
+# List of directories to include in the documentation (files within these directories will be processed recursively)
+directories:
+  - "src"
