@@ -1,4 +1,4 @@
-# Readme.md
+# Markdown My Project
 
 ## Project Overview
 
@@ -8,10 +8,19 @@
 
 - **Configuration-Driven**: Uses YAML configuration files to specify project details, files to include, and output paths.
 - **Recursive File Processing**: Processes files and directories recursively, allowing for comprehensive documentation of project structures.
-- **Language Detection**: Identifies programming languages based on file extensions using a customizable language definition file.
+- **Language Detection**: IdentiExample Project:
+└── cargo.toml
+├── projects
+│   └── example.yml
+└── src
+    ├── main.rs
+    └── utils.rsfies programming languages based on file extensions using a customizable language definition file.
 - **Markdown Generation**: Generates well-structured Markdown documentation with syntax highlighting for source code.
 - **Logging**: Provides detailed logging during the documentation generation process, aiding in debugging and tracking progress.
 - **Multi-Project Support**: Can generate documentation for multiple projects defined in separate configuration files within the `projects` directory.
+
+## Example
+For a detailed example of how `Markdown My Project` works, refer to the [Example.md](Example.md) file in the project directory. This file is the generated Markdown documentation for this project in the output directory.
 
 ## Installation
 
