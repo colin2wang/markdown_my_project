@@ -16,8 +16,8 @@ use std::path::{Path, PathBuf};
 ///
 /// * `Result<(), Box<dyn std::error::Error>>` - Success or error.
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Initialize the logger with the Info level
-    logger::init_logger(log::LevelFilter::Info)?;
+    // Initialize the logger with the configuration from log4rs.yml
+    logger::init_logger()?;
 
     log::info!("Starting to generate project documentation...");
 

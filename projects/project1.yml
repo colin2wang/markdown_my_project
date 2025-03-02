@@ -11,7 +11,9 @@ output_file: "markdown_my_project.md"
 
 # List of specific files to include in the documentation
 files:
-  - "cargo.toml"
+  - cargo.toml
+  - log4rs.yml
+  - languages.yml
 
 # List of directories to include in the documentation (files within these directories will be processed recursively)
 directories:

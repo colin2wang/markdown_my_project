@@ -1,0 +1,15 @@
+appenders:
+  stdout:
+    kind: console
+    encoder:
+      pattern: "{d(%Y-%m-%d %H:%M:%S)} {l} {f} {L} — {m}{n}"
+  file:
+    kind: file
+    path: "logs/project_documentation_${?}.log" # Dynamic filename with timestamp
+    encoder:
+      pattern: "{d(%Y-%m-%d %H:%M:%S)} {l} {f}:{L} — {m}{n}"
+root:
+  level: debug
+  appenders:
+    - stdout
+    - file
