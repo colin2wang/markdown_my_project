@@ -48,6 +48,7 @@ pub fn generate_markdown(
     // Add the project file tree to the Markdown
     markdown_content.push_str("\n## Project File Tree\n\n");
     markdown_content.push_str("```\n"); // Start code block
+    markdown_content.push_str(&*(project_name.to_owned() + "\n")); // Start code block
     markdown_content.push_str(&generate_tree(project_name, &files, project_root)); // Generate tree structure
     markdown_content.push_str("```\n"); // End code block
 
@@ -65,76 +66,97 @@ pub fn generate_markdown(
 /// # Returns
 ///
 /// * `String` - The tree structure as a string.
-fn generate_tree(
-    project_name: &str,
-    files: &[(PathBuf, String)],
-    project_root: &Path,
-) -> String {
-    // Use a BTreeMap to store files and directories hierarchically
-    let mut tree_map: BTreeMap<Vec<String>, Vec<String>> = BTreeMap::new();
+/// Represents a directory in the tree structure.
+#[derive(Debug)]
+struct Directory {
+    name: String,
+    files: Vec<String>,
+    subdirectories: BTreeMap<String, Directory>,
+}
+
+impl Directory {
+    fn new(name: String) -> Self {
+        Directory {
+            name,
+            files: Vec::new(),
+            subdirectories: BTreeMap::new(),
+        }
+    }
+
+    fn add_file(&mut self, file: String) {
+        self.files.push(file);
+    }
+}
+
+fn build_directory_tree(files: &[(PathBuf, String)], project_root: &Path) -> Directory {
+    let mut root = Directory::new("".to_string());
 
     for (file_path, _) in files {
-        // Get the relative path of the file with respect to the project root
         let relative_path = file_path.strip_prefix(project_root).unwrap_or(file_path);
         let components: Vec<String> = relative_path
             .components()
             .map(|c| c.as_os_str().to_string_lossy().into_owned())
             .collect();
 
-        // Extract the file name
-        let file_name = components.last().unwrap().clone();
-        // Extract the directory path
-        let dir_components = components[..components.len() - 1].to_vec();
-
-        // Add the file to the corresponding directory in the tree map
-        tree_map.entry(dir_components).or_insert_with(Vec::new).push(file_name);
-    }
-
-    // Recursively generate the tree structure
-    fn generate_tree_recursive(
-        tree_map: &BTreeMap<Vec<String>, Vec<String>>,
-        current_path: &[String],
-        indent: &str,
-    ) -> String {
-        let mut tree = String::new();
-
-        for (i, (dir_path, files)) in tree_map.iter().enumerate() {
-            let is_last = i == tree_map.len() - 1;
-
-            // Skip if the current path is not a subdirectory of the current path
-            if dir_path.len() > current_path.len() && dir_path.starts_with(current_path) {
-                // Directory name
-                let dir_name = &dir_path[current_path.len()];
-                // Add directory to the tree
-                tree.push_str(&format!(
-                    "{}{}── {}\n",
-                    indent,
-                    if is_last { "└" } else { "├" },
-                    dir_name
-                ));
-
-                // Recursively generate subdirectories
-                let new_indent = if is_last { "    " } else { "│   " };
-                tree.push_str(&generate_tree_recursive(tree_map, &dir_path, new_indent));
-            } else if dir_path == current_path {
-                // Files in the current directory
-                for (j, file) in files.iter().enumerate() {
-                    let is_last_file = j == files.len() - 1;
-                    tree.push_str(&format!(
-                        "{}{}── {}\n",
-                        indent,
-                        if is_last_file { "└" } else { "├" },
-                        file
-                    ));
-                }
+        let mut current_dir = &mut root;
+        for (i, component) in components.iter().enumerate() {
+            if i < components.len() - 1 {
+                let entry = current_dir.subdirectories.entry(component.clone());
+                let sub_dir = entry.or_insert_with(|| Directory::new(component.clone()));
+                current_dir = sub_dir;
+            } else {
+                current_dir.add_file(component.clone());
             }
         }
-
-        tree
     }
 
-    // Start generating the tree structure from the root directory
-    let mut tree = format!("{}:\n", project_name); // Add project name to the first line of the tree
-    tree.push_str(&generate_tree_recursive(&tree_map, &[], ""));
+    root
+}
+
+fn directory_tree_to_string(
+    directory: &Directory,
+    indent: &str,
+    is_last: bool,
+    is_root: bool,
+) -> String {
+    let mut tree = String::new();
+    if !is_root {
+        let connector = if is_last { "└── " } else { "├── " };
+        let line = format!("{}{}{}", indent, connector, directory.name);
+        tree.push_str(&line);
+        tree.push('\n');
+    }
+
+    let new_indent = if is_last { format!("{}{}", indent, "    ") } else { format!("{}{}", indent, "│   ") };
+
+    // Process files
+    for (i, file) in directory.files.iter().enumerate() {
+        let is_last_file = i == directory.files.len() - 1;
+        let connector = if is_last_file { "└── " } else { "├── " };
+        tree.push_str(&format!("{}{}{}\n", new_indent, connector, file));
+    }
+
+    // Process subdirectories
+    let subdirs: Vec<_> = directory.subdirectories.values().collect();
+    for (i, sub_dir) in subdirs.iter().enumerate() {
+        let is_last_sub = i == subdirs.len() - 1;
+        let sub_tree = directory_tree_to_string(sub_dir, &new_indent, is_last_sub, false);
+        tree.push_str(&sub_tree);
+    }
+
+    tree
+}
+
+fn generate_tree(
+    project_name: &str,
+    files: &[(PathBuf, String)],
+    project_root: &Path,
+) -> String {
+    let mut root = build_directory_tree(files, project_root);
+    root.name = project_name.to_string();
+
+    let tree = directory_tree_to_string(&root, "", true, true);
+    // Ensure there's a newline at the end for markdown formatting
+
     tree
 }

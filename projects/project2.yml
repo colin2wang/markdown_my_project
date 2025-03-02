@@ -1,19 +1,22 @@
-# Project Configuration for My Project
+# Project Configuration for Project Documentation
 
 # Name of the project
-project_name: "My Project"
+project_name: "PDF to Excel"
 
 # Path to the project root directory
-project_path: "path/to/project"
+project_path: "F:/Workspaces/JetBrains/RustRover/pdf_to_excel"
 
 # Output file path for the generated documentation
-output_file: "project.md"
+output_file: "pdf_to_excel.md"
 
 # List of specific files to include in the documentation
 files:
-  - "file1.txt"
-  - "file2.txt"
+  - cargo.toml
+  - config.yml
+  - log4rs.yml
 
 # List of directories to include in the documentation (files within these directories will be processed recursively)
 directories:
-  - "src"
+  - src
+  - test
+  - projects
