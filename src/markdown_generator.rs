@@ -122,7 +122,7 @@ fn directory_tree_to_string(
     let mut tree = String::new();
     if !is_root {
         let connector = if is_last { "└── " } else { "├── " };
-        let line = format!("{}{}{}", indent, connector, directory.name);
+        let line = format!("{}{}{}/", indent, connector, directory.name);
         tree.push_str(&line);
         tree.push('\n');
     }
