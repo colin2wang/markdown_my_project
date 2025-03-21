@@ -66,7 +66,6 @@ pub fn generate_markdown(
 /// # Returns
 ///
 /// * `String` - The tree structure as a string.
-/// Represents a directory in the tree structure.
 #[derive(Debug)]
 struct Directory {
     name: String,

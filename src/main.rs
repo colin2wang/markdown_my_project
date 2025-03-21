@@ -41,12 +41,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             // Get the project root directory
             let project_root = Path::new(&config.project_path);
 
-            // Process files and directories specified in the configuration
-            let files = file_processor::process_files(&config.project_path, &config.files, &config.directories)?;
+            // Process files and directories specified in the configuration, excluding specified directories
+            let files = file_processor::process_files(
+                &config.project_path,
+                &config.files,
+                &config.directories,
+                &config.exclude_directories,
+            )?;
             log::info!("Processed files for project: {}", config.project_name);
 
             // Generate Markdown content for the project documentation
-            let markdown_content = markdown_generator::generate_markdown(&config.project_name, files, &languages, project_root);
+            let markdown_content = markdown_generator::generate_markdown(
+                &config.project_name,
+                files,
+                &languages,
+                project_root,
+            );
 
             // Write the generated Markdown content to the output file
             fs::create_dir_all("output")?;

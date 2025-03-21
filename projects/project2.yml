@@ -20,3 +20,6 @@ directories:
   - src
   - test
   - projects
+
+# List of directories to exclude from the documentation
+exclude_directories:

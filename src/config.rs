@@ -3,6 +3,10 @@ use std::fs;
 use std::path::PathBuf;
 
 /// Configuration structure for a project.
+///
+/// This struct represents the configuration for a project, including its name,
+/// root directory path, output file path, specific files to include, directories
+/// to include recursively, and directories to exclude.
 #[derive(Debug, Deserialize)]
 pub struct Config {
     /// Name of the project.
@@ -15,6 +19,8 @@ pub struct Config {
     pub files: Vec<PathBuf>,
     /// List of directories to include in the documentation (files within these directories will be processed recursively).
     pub directories: Vec<PathBuf>,
+    /// List of directories to exclude from the documentation.
+    pub exclude_directories: Vec<String>,
 }
 
 impl Config {
