@@ -1,5 +1,7 @@
 # Markdown My Project
 
+[Change History](CHANGE_HISTORY.md) | 
+
 ## Project Overview
 
 **Markdown My Project** is a command-line tool written in Rust that generates Markdown documentation for software projects. It extracts file contents and directory structures from specified projects and presents them in a user-friendly Markdown format. This tool is designed to help developers quickly generate documentation for projects, including source code, configuration files, and other relevant resources.
@@ -145,3 +147,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contribution
 
 Contributions are welcome! Please open issues or submit pull requests for any improvements or bug fixes.
+
