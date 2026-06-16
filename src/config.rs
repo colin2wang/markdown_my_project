@@ -30,6 +30,14 @@ pub struct Config {
     /// If not specified, no limit is applied.
     #[serde(default)]
     pub max_file_size: Option<u64>,
+
+    /// Markdown output language. "zh_cn" for Chinese, "en_us" for English (default).
+    #[serde(default = "default_markdown_lang")]
+    pub markdown_lang: String,
+}
+
+fn default_markdown_lang() -> String {
+    "en_us".to_string()
 }
 
 impl Config {
@@ -108,6 +116,7 @@ impl Clone for Config {
             exclude_directories: self.exclude_directories.clone(),
             exclude_patterns: self.exclude_patterns.clone(),
             max_file_size: self.max_file_size,
+            markdown_lang: self.markdown_lang.clone(),
         }
     }
 }

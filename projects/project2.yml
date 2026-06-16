@@ -9,6 +9,9 @@ project_path: "F:/Workspaces/JetBrains/RustRover/pdf_to_excel"
 # Output file path for the generated documentation
 output_file: "pdf_to_excel.md"
 
+# Markdown output language: "zh_cn" for Chinese, "en_us" for English
+markdown_lang: en_us
+
 # List of specific files to include in the documentation
 files:
   - cargo.toml

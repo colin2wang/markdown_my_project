@@ -97,6 +97,7 @@ fn main() -> Result<()> {
             files,
             &languages,
             project_root,
+            &config.markdown_lang,
         ).context(format!("Failed to generate markdown for project: {}", config.project_name))?;
 
         // Write the generated Markdown content to the output file with UTF-8 encoding
